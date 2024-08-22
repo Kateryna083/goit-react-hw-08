@@ -1,5 +1,3 @@
-import css from "../SearchBox/";
-
 export default function SearchBox({ value, onFilter }) {
   return (
     <div className="css.box">
