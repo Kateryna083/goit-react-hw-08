@@ -1,6 +1,8 @@
 import { HiUser } from "react-icons/hi";
 import { AiFillPhone } from "react-icons/ai";
 
+// import css from './'
+
 export default function Contact({ contact: { name, number, id }, onDelete }) {
   return (
     <div>
