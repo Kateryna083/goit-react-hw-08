@@ -1,51 +1,53 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { Field, Form, Formik, ErrorMessage } from "formik";
 import { useDispatch } from "react-redux";
 import { addContact } from "../../redux/contactsSlice";
-// import css from './ContactForm.module.css'
+import { nanoid } from "nanoid";
+// import css from "./ContactForm.module.css";
+import * as Yup from "yup";
 
-const ContactSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(3, "Too short, min 3 letters!")
-    .max(50, "Too long, max 15 letters!")
-    .required("This field is required!"),
-  number: Yup.string()
-    .length(7, "Number must be exactly 7 characters long")
-    .matches(/^\d+$/, "Number must contain only digits")
-    .required("This field is required!"),
-});
 const initialValues = { username: "", usernumber: "" };
 
 export default function ContactForm() {
   const dispatch = useDispatch();
 
+  const inputSchema = Yup.object().shape({
+    username: Yup.string()
+      .min(3, "Too short!")
+      .max(50, "Too long!")
+      .required("Required"),
+    usernumber: Yup.string()
+      .matches(/^[\d-]+$/, "Must be a number")
+      .min(9, "Too short")
+      .max(12, "Too long!")
+      .required("Required"),
+  });
+
   const handleSubmit = (values, actions) => {
     const newContact = {
-      id: Date.now(),
-      name: values.name,
-      number: values.number,
+      id: nanoid(),
+      name: values.username,
+      number: values.usernumber,
     };
     dispatch(addContact(newContact));
     actions.resetForm();
   };
+
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={handleSubmit}
-      validationSchema={ContactSchema}
+      validationSchema={inputSchema}
     >
       <Form>
-        <div>
-          <label htmlFor="name">Name</label>
-          <Field type="text" name="name" />
-          <ErrorMessage name="name" component="span" />
-        </div>
-        <div>
-          <label htmlFor="number">Number</label>
-          <Field type="text" name="number" />
-          <ErrorMessage name="number" component="span" />
-        </div>
-        <button type="submit">Add contact</button>
+        <label htmlFor="username">Name</label>
+        <Field type="text" name="username" id="username" />
+        <ErrorMessage name="username" component="span" />
+
+        <label htmlFor="usernumber">Number</label>
+        <Field type="text" name="usernumber" id="usernumber" />
+        <ErrorMessage name="usernumber" component="span" />
+
+        <button type="submit ">Add contact</button>
       </Form>
     </Formik>
   );
