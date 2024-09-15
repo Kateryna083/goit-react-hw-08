@@ -1,7 +1,8 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-
-// import css from './'
+import { useDispatch } from "react-redux";
+import { addContact } from "../../redux/contactsSlice";
+// import css from './ContactForm.module.css'
 
 const ContactSchema = Yup.object().shape({
   name: Yup.string()
@@ -13,30 +14,34 @@ const ContactSchema = Yup.object().shape({
     .matches(/^\d+$/, "Number must contain only digits")
     .required("This field is required!"),
 });
+const initialValues = { username: "", usernumber: "" };
 
-export default function ContactForm({ onAddContact }) {
+export default function ContactForm({}) {
+  const dispatch = useDispatch();
+
   const handleSubmit = (values, actions) => {
-    onAddContact(values);
+    const newContact = {
+      id: Date.now(),
+      name: values.name,
+      number: values.number,
+    };
+    dispatch(addContact(newContact));
     actions.resetForm();
   };
   return (
     <Formik
-      initialValues={{
-        name: "",
-        number: "",
-        id: Date.now(),
-      }}
-      validationSchema={ContactSchema}
+      initialValues={initialValues}
       onSubmit={handleSubmit}
+      validationSchema={ContactSchema}
     >
       <Form>
         <div>
-          <label>Name</label>
+          <label htmlFor="name">Name</label>
           <Field type="text" name="name" />
           <ErrorMessage name="name" component="span" />
         </div>
         <div>
-          <label>Number</label>
+          <label htmlFor="number">Number</label>
           <Field type="text" name="number" />
           <ErrorMessage name="number" component="span" />
         </div>
