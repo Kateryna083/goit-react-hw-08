@@ -5,7 +5,7 @@ export const selectContacts = (state) => state.contacts.items;
 const slice = createSlice({
   name: "contacts",
   initialState: {
-    value: { items: [] },
+    items: [],
   },
   reducers: {
     addContact: (state, action) => {
