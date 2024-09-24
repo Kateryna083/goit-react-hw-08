@@ -1,22 +1,22 @@
 import { useSelector } from "react-redux";
-import { selectContacts } from "../../redux/contactsSlice";
-import { selectFilter } from "../../redux/filtersSlice";
+import { selectVisibleContacts } from "../../redux/contactsSlice.js";
 import Contact from "../Contact/Contact";
-// import css from "./ContactList.module.css";
+import css from "./ContactList.module.css";
 
 export default function ContactList() {
-  const contacts = useSelector(selectContacts);
-  const filter = useSelector(selectFilter);
-
-  const visibleContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  const visibleContacts = useSelector(selectVisibleContacts);
 
   return (
-    <ul>
-      {visibleContacts.map((contact) => (
-        <Contact key={contact.id} item={contact} />
-      ))}
-    </ul>
+    <>
+      {visibleContacts.length > 0 ? (
+        <ul className={css.container}>
+          {visibleContacts.map((contact) => (
+            <Contact key={contact.id} contact={contact} />
+          ))}
+        </ul>
+      ) : (
+        <p>No contacts available</p>
+      )}
+    </>
   );
 }

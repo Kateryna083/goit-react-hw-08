@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setFilter, selectFilter } from "../../redux/filtersSlice";
+import { setFilter } from "../../redux/filtersSlice";
+import { selectFilter } from "../../redux/filtersSlice";
+import css from "./SearchBox.module.css";
 import { FaSearch } from "react-icons/fa";
-// import css from "./SearchBox.module.css";
 
 export default function SearchBox() {
   const dispatch = useDispatch();
@@ -12,8 +13,8 @@ export default function SearchBox() {
   };
 
   return (
-    <div>
-      <label htmlFor="searchbox">
+    <div className={css.container}>
+      <label htmlFor="searchbox" className={css.label}>
         <FaSearch size="12" /> Find contacts by name
       </label>
       <input

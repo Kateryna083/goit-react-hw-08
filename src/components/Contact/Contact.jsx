@@ -1,25 +1,30 @@
-import { HiUser } from "react-icons/hi";
-import { AiFillPhone } from "react-icons/ai";
+import css from "./Contact.module.css";
+import { AiOutlineUser } from "react-icons/ai";
+import { MdDelete } from "react-icons/md";
+import { FiPhone } from "react-icons/fi";
 import { useDispatch } from "react-redux";
-import { deleteContact } from "../../redux/contactsSlice";
-// import css from "./Contact.module.css";
+import { deleteContact } from "../../redux/contactsOps";
 
-export default function Contact({ item }) {
+export default function Contact({ contact }) {
   const dispatch = useDispatch();
-  const handleDelete = (contactId) => {
-    dispatch(deleteContact(contactId));
+  const handleDelete = () => {
+    dispatch(deleteContact(contact.id));
   };
   return (
-    <div>
-      <div>
-        <HiUser />
-        <p>{item.name}</p>
+    <li className={css.container}>
+      <div className={css.containerData}>
+        <div>
+          <AiOutlineUser className={css.icon} />
+          <span className={css.itemEl}>{contact.name}</span>
+        </div>
+        <div>
+          <FiPhone />
+          <span className={css.itemEl}>{contact.number}</span>
+        </div>
       </div>
-      <div>
-        <AiFillPhone />
-        <p>{item.number}</p>
-      </div>
-      <button onClick={() => handleDelete(item.id)}>Delete</button>
-    </div>
+      <button className={css.button} onClick={handleDelete}>
+        <MdDelete />
+      </button>
+    </li>
   );
 }
