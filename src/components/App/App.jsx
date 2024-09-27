@@ -1,50 +1,54 @@
 import "./App.css";
-import { useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useDispatch, useSelector } from "react-redux";
-import ContactForm from "../ContactForm/ContactForm";
-import SearchBox from "../SearchBox/SearchBox";
-import ContactList from "../ContactList/ContactList";
-import { fetchContacts } from "../../redux/contactsOps";
-import { selectIsLoading, selectIsError } from "../../redux/contactsSlice";
-import { RotatingLines } from "react-loader-spinner";
+import { Route, Routes } from "react-router-dom";
+import Layout from "../Layout/Layout";
+import { lazy, Suspense } from "react";
+
+const HomePage = lazy(() => import("../../pages/HomePage/HomePage"));
+const LoginPage = lazy(() => import("../../pages/LoginPage/LoginPage"));
+const RegistrationPage = lazy(() =>
+  import("../../pages/RegistrationPage/RegistrationPage")
+);
+const ContactsPage = lazy(() =>
+  import("../../pages/ContactsPage/ContactsPage")
+);
 
 export default function App() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
-
-  const loader = useSelector(selectIsLoading);
-  const error = useSelector(selectIsError);
-
-  useEffect(() => {
-    if (error) {
-      toast.error("Error fetching contacts!");
-    }
-  }, [error]);
-
   return (
     <div>
-      <h1>Phonebook</h1>
-      <ContactForm />
-      <SearchBox />
-      {loader && (
-        <RotatingLines
-          visible={true}
-          height="76"
-          width="76"
-          strokeWidth="2"
-          strokeColor="grey"
-          animationDuration="0.75"
-          ariaLabel="rotating-lines-loading"
-          wrapperStyle={{}}
-          wrapperClass="loader"
-        />
-      )}
-      <ToastContainer autoClose={2000} />
-      <ContactList />
+      <Layout>
+        <Suspense fallback={null}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/register" element={<RegistrationPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/contacts" element={<ContactsPage />} />
+          </Routes>
+        </Suspense>
+      </Layout>
     </div>
   );
 }
+
+// import { lazy, Suspense } from "react";
+// import { Route, Routes } from "react-router-dom";
+// import Layout from "./Layout/Layout";
+
+// const HomePage = lazy(() => import("../pages/HomePage/HomePage"));
+// const RegisterPage = lazy(() => import("../pages/RegisterPage/RegisterPage"));
+// const LoginPage = lazy(() => import("../pages/LoginPage/LoginPage"));
+// const TasksPage = lazy(() => import("../pages/TasksPage/TasksPage"));
+
+// export default function App() {
+//   return (
+//     <Layout>
+//       <Suspense fallback={null}>
+//         <Routes>
+//           <Route path="/" element={<HomePage />} />
+//           <Route path="/register" element={<RegisterPage />} />
+//           <Route path="/login" element={<LoginPage />} />
+//           <Route path="/tasks" element={<TasksPage />} />
+//         </Routes>
+//       </Suspense>
+//     </Layout>
+//   );
+// }
