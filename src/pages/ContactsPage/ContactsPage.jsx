@@ -8,6 +8,9 @@ import ContactList from "../..//components/ContactList/ContactList";
 import { fetchContacts } from "../../redux/contacts/operations";
 import { selectIsLoading, selectIsError } from "../../redux/contacts/selectors";
 import { RotatingLines } from "react-loader-spinner";
+import { selectCurrentContact } from "../../redux/contacts/selectors";
+import ContactEditor from "../../components/ContactEditor/ContatcEditor";
+import css from "./ContactsPage.module.css";
 
 export default function ContactsPage() {
   const dispatch = useDispatch();
@@ -17,6 +20,7 @@ export default function ContactsPage() {
 
   const loader = useSelector(selectIsLoading);
   const error = useSelector(selectIsError);
+  const currentContact = useSelector(selectCurrentContact);
 
   useEffect(() => {
     if (error) {
@@ -25,9 +29,13 @@ export default function ContactsPage() {
   }, [error]);
 
   return (
-    <div>
+    <div className={css.container}>
       <h1>Phonebook</h1>
-      <ContactForm />
+      {currentContact ? (
+        <ContactEditor contact={currentContact} />
+      ) : (
+        <ContactForm />
+      )}
       <SearchBox />
       {loader && (
         <RotatingLines
